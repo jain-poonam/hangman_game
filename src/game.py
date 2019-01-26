@@ -1,3 +1,6 @@
+"""Web service for Hangman Game and to expose different HTTP/REST api for clients 
+to access web service.
+"""
 import random
 import string
 import re
@@ -5,12 +8,11 @@ from flask import Flask,render_template,request
 
 app = Flask(__name__)
 
+"List of words to be gueseed by the user"
 wordlist = ["hangman", "chairs", "backpack", "bodywash", "clothing",
                  "computer", "python", "program", "glasses", "sweatshirt",
                  "sweatpants", "mattress", "friends", "clocks", "biology",
                  "algebra", "suitcase", "knives", "ninjas", "shampoo"]
-
-
 word = ""
 guess= []
 original = []
@@ -20,11 +22,12 @@ counter = 0
 lettersguessed = []
 length=0
 
-
+"Starting Api route for the Welcome page of the Hangman Game"
 @app.route('/')
 def my_form():
     return render_template('form.html')
 
+"To proceed the game further when Post request received and provide layout for the guess"
 @app.route('/', methods=['POST'])
 def my_form_post():
     global guess
@@ -58,8 +61,8 @@ def my_form_post():
         guess1= " ".join(guess)
         length= (len(original)+3)
         return render_template('play.html',result = guess1)
-#         return("Word to be guessed: "+ guess1)
 
+"To check the enter alphabets by the user and pops up message accordingly"
 @app.route('/play', methods=['POST'])
 def my_play_post():
     text = request.form['text']
@@ -91,8 +94,7 @@ def my_play_post():
         else:
             return render_template('play.html',result = " ".join(guess),error="Incorrect Alphabet")
     else:
-        return render_template('form.html',result ="You have lost!! Correct word is: "+ word)   
-#         
+        return render_template('form.html',result ="You have lost!! Correct word is: "+ word)            
     return render_template('play.html',result = " ".join(guess))
 
 if __name__ == "__main__":
